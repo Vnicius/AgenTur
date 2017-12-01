@@ -1,12 +1,9 @@
 
 class Route():
 
-    def __init__(self):
-        self.distancia = 0
-        self.delay_calculator = None
-
-    def set_distancia(self, distancia):
+    def __init__(self, distancia):
         self.distancia = distancia
+        self.delay_calculator = None
     
     def set_delay_calculator(self, delay_calculator):
         self.delay_calculator = delay_calculator

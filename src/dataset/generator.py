@@ -3,7 +3,7 @@
 '''
 from random import randint
 
-for rota in range(1,19):
+for rota in range(18):
     out = open(str(rota)+'.csv', 'w')
     for dia in range(0,7):
         for hora in range(0,24):
