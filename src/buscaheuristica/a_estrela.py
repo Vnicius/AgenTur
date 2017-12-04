@@ -96,8 +96,10 @@ class AEstrela(object):
             # Adiciona baldeacao, trafego
             baldeacao = 0 if self.existe_baldeacao(v_antecessor, v_atual, v_adj) else custo_baldeacao
             trafego = self.get_aresta(v_atual, v_adj).custo_trafego
-            novo_g_de_n = distancia_ate_n[v_atual.chave] + self.distancia_entre(v_atual, v_adj) + trafego + baldeacao
+            custo_adicional = trafego + baldeacao
+            novo_g_de_n = distancia_ate_n[v_atual.chave] + self.distancia_entre(v_atual, v_adj) + custo_adicional
             if distancia_ate_n[v_adj.chave]:
+              print(v_adj.chave)
               if novo_g_de_n >= distancia_ate_n[v_adj.chave]:
                 continue		# Este nao eh o melhor caminho         
 

@@ -21,3 +21,9 @@ class Aresta(object):
   @property
   def cor(self):
     return self._cor
+
+  def __repr__(self):
+    return "\nDistancia: " + str(self._distancia) + \
+           "\nDestino: " + str(self._v_destino.chave) + \
+           "\nCor: " + str(self._cor) + \
+           "\nCusto: " + str(self.custo_trafego) + "\n"
