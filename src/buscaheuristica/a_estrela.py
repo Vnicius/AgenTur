@@ -1,6 +1,6 @@
 class AEstrela(object):
 
-  def __init__(self, vertices, limiar_escolha_pt):
+  def __init__(self, vertices, prioriza_pt):
     # lista de vertices ja calculados
     self._vertices_abertos = []
     # lista de vertices ainda nao calculados
@@ -8,7 +8,7 @@ class AEstrela(object):
     self._vertices = vertices
     # Variavel ira decrescer o custo da aresta, caso o vertice destino possua um pT
     # Quanto maior este valor, maior chance de passar por um PT
-    self._limiar_escolha_pt = limiar_escolha_pt
+    self._prioriza_pt = prioriza_pt
 
   def reconstroi_caminho(self, v_antecessor, v_atual):
     caminho = [v_atual.chave]
@@ -99,7 +99,7 @@ class AEstrela(object):
             novo_g_de_n = distancia_ate_n[v_atual.chave] + self.distancia_entre(v_atual, v_adj) + custo_adicional
             
             if v_adj.ponto_turistico:
-              novo_g_de_n -= self._limiar_escolha_pt
+              novo_g_de_n -= self._prioriza_pt
 
             # Distancia do inicio ate o no adjacente
             if distancia_ate_n[v_adj.chave]:                         

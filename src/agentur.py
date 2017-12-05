@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     inicio = int(sys.argv[1])
     fim = int(sys.argv[2])
-    limiar_pt = int(sys.argv[3])
+    prioriza_pt = int(sys.argv[3]) if len(sys.argv) == 4 else 50
     dia = 1
     hora = 14
     fluxo = 10
@@ -82,5 +82,5 @@ if __name__ == "__main__":
     vertices = contruir_grafo(inicio, fim, dia, hora, fluxo,
                               lista_pontos_adj, lista_pontos_turisticos, dict_rotas)
     
-    caminho, custo = AEstrela(vertices, limiar_pt).a_estrela(vertices[inicio - 1], vertices[fim - 1], 15)
+    caminho, custo = AEstrela(vertices, prioriza_pt).a_estrela(vertices[inicio - 1], vertices[fim - 1], 15)
     print('Menor Caminho: {}'.format(' -> '.join(caminho)))
