@@ -1,11 +1,14 @@
 class AEstrela(object):
 
-  def __init__(self, vertices):
+  def __init__(self, vertices, limiar_escolha_pt):
     # lista de vertices ja calculados
     self._vertices_abertos = []
     # lista de vertices ainda nao calculados
     self._vertices_fechados = []
     self._vertices = vertices
+    # Variavel ira decrescer o custo da aresta, caso o vertice destino possua um pT
+    # Quanto maior este valor, maior chance de passar por um PT
+    self._limiar_escolha_pt = limiar_escolha_pt
 
   def reconstroi_caminho(self, v_antecessor, v_atual):
     caminho = [v_atual.chave]
@@ -30,12 +33,13 @@ class AEstrela(object):
     for aresta in v_inicio.arestas_adj:
       if aresta.v_destino == v2_destino:
         return aresta
-
+  
+  # Recupera o menor_f dentre os vertices em aberto
   def recupera_menor_f(self):
     menor = self._vertices_abertos[0]
     for v in self._vertices_abertos:
       if v.f_de_n < menor.f_de_n:
-        menor = v
+        menor = v 
     return menor
 
   def existe_baldeacao(self, antecessor, v_atual, v_final):
@@ -52,16 +56,11 @@ class AEstrela(object):
   def a_estrela(self, v_inicio, v_final, custo_baldeacao):
     # Inicia pelo primeiro vertice
     self._vertices_abertos.append(v_inicio)
-
-    # For each node, which node it can most efficiently be reached from.
-    # If a node can be reached from many nodes, cameFrom will eventually contain the
-    # most efficient previous step.
     
     # Para cada vertice, eh salvo o seu antecessor que possui o melhor caminho,
-    # caso ele tenha muitos caminhos
+    # caso ele tenha muitos caminhos, v_antecessor indicara o menor caminho
     v_antecessor = {}
     
-    # For each node, the cost of getting from the start node to that node.
     # Para cada vertice, a distancia do inicio ate o vertice atual
     distancia_ate_n = {}
 
@@ -87,7 +86,7 @@ class AEstrela(object):
 
         for v_adj in self.get_v_adjacentes(v_atual):
             if v_adj in self._vertices_fechados:
-                continue		# Ignore the neighbor which is already evaluated.
+                continue		# Ignora os vizinhos ja calculados
 
             if v_adj not in self._vertices_abertos: # Um vertice novo
                 self._vertices_abertos.append(v_adj)
@@ -98,12 +97,16 @@ class AEstrela(object):
             trafego = self.get_aresta(v_atual, v_adj).custo_trafego
             custo_adicional = trafego + baldeacao
             novo_g_de_n = distancia_ate_n[v_atual.chave] + self.distancia_entre(v_atual, v_adj) + custo_adicional
-            if distancia_ate_n[v_adj.chave]:
-              print(v_adj.chave)
+            
+            if v_adj.ponto_turistico:
+              novo_g_de_n -= self._limiar_escolha_pt
+
+            # Distancia do inicio ate o no adjacente
+            if distancia_ate_n[v_adj.chave]:                         
               if novo_g_de_n >= distancia_ate_n[v_adj.chave]:
                 continue		# Este nao eh o melhor caminho         
 
-            # melhor caminho ate agora
+            # Melhor caminho ate agora                        
             v_antecessor[v_adj.chave] = v_atual
             distancia_ate_n[v_adj.chave] = novo_g_de_n
             # f(n) = g(n) + h(n)
@@ -115,22 +118,6 @@ if __name__ == '__main__':
   from vertice import Vertice
   from aresta import Aresta
   import sys
-
-  # noS = Vertice('S', 3)
-  # noA = Vertice('A', 2)
-  # noB = Vertice('B', 1)
-  # noG = Vertice('G', 0)
-
-  # vertices = [noS, noA, noB, noG]
-
-  # noS.add_aresta_adj(Aresta(noA, 2))
-  # noS.add_aresta_adj(Aresta(noB, 2))
-  # noA.add_aresta_adj(Aresta(noG, 2))
-  # noB.add_aresta_adj(Aresta(noG, 3))
-  # noB.add_aresta_adj(Aresta(noS, 2))
-
-  # caminho = AEstrela(vertices).a_estrela(noS, noG)
-  # print('Caminho {}'.format(' -> '.join(caminho)))
 
   vertices = []
   # segundo parametro corresponde a distancia do No ate o destino Final(nesse caso E12)
